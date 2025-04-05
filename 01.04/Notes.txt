@@ -1,0 +1,43 @@
+﻿Entity Framework
+ORM - Object Relational Mapping - відображення об'єктів на реляційні таблиці.
+Ручний варіант
+class User{           //DTO - Data Transfer Object or Entity - об'єкт, який відображає таблицю
+	public User(DataReader r){
+		this.Name = r.GetString("Name");
+		...
+	}
+}
+
+DataReader = cmd.ExecuteReader("SELECT * FROM Users WHERE id = ...");
+r.Read();
+User u = new User(r);
+
+Mini ORM - Dapper
+User user = Query<User>("SELECT * FROM Users WHERE Id = @Id", new { Id = 1 })
+
+ORM - Framework
+Контекст даних - об'єкт, який відображає базу даних.
+User user = context.Users.Find(u => u.Id = ...);
+
+Entity Framework - Набір інструментів для роботи з базами даних. Через LINQ.
+
+
+RFC 2898 - PKCS #5: Password-Based Cryptography Specification Version 2.0 (ietf.org)
+
+Встановлення Entity Framework NuGet
+1. Microsoft.EntityFrameworkCore - базові інструменти
+2. Microsoft.EntityFrameworkCore.SqlServer - підтримка SQL Server
+3. Microsoft.EntityFrameworkCore.Tools - інструменти для роботи з EF
+4. Micsosoft.Extention.Configuration - підтримка конфігурації
+   Microsoft.Extention.Configuration.Json - підтримка JSON конфігурації
+
+Налаштування
+- створюємо appsettings.json
+- додаємо підключення до бази даних
+!! на момент написання рядку до створення БД
+- у власитвовстях appsettings.json вибираємо "Copy"
+- створюємо контекст даних
+
+Ініціаліалізація
+Міграції - аналог гіт комітів для БД
+
