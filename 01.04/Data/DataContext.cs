@@ -36,6 +36,11 @@ namespace _01._04.Data
             modelBuilder.Entity<Entities.UserAccess>()
                 .HasIndex(ua => ua.Login)
                 .IsUnique();
+            modelBuilder.Entity<Entities.UserAccess>() //Налаштування зв'язків через навігаційні властивості
+                .HasOne(ua => ua.User)
+                .WithMany()
+                .HasForeignKey(ua => ua.UserId) // ці інструкції не обов'язкові, якщо дотримуватися іменнування
+                .HasPrincipalKey(u => u.Id);
 
             SeedData(modelBuilder);
         }
