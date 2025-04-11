@@ -68,5 +68,63 @@ namespace _01._04
             }
         }
 
+        private void Button4_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock1.Text += string.Join("\n",
+                _context.Users.GroupJoin(
+                    _context.UserAccesses,
+                    u => u.Id,
+                    ua => ua.UserId,
+                    (u, uas) => $"{u.Name} {uas.Count()}"
+                    ));
+
+
+            TextBlock1.Text += "\n\n";
+
+            foreach (User user in _context.Users.Include(u => u.userAccesses))
+            {
+                TextBlock1.Text += $"{user.Name} {user.userAccesses.Count}\n";
+            }
+        }
+
+        private void Button5_Click(object sender, RoutedEventArgs e)
+        {
+            /*TextBlock1.Text = String.Join("\n", _context
+                .Users
+                .FromSqlRaw(@"SELECT Users.* FROM Users
+                JOIN UserAccesses on Users.id = UserAccesses.UserId
+                JOIN UserRoles on UserAccesses.RoleId = UserRoles.Id
+                WHERE UserRoles.CanUpdate = 1")
+                .Select(u => u.Name));*/
+            /*TextBlock1.Text = string.Join("\n",
+    _context.Users
+        .Join(_context.UserAccesses,
+            u => u.Id,
+            ua => ua.UserId,
+            (u, ua) => new { u.Name, ua.RoleId })
+        .Join(_context.UserRoles,
+            uua => uua.RoleId,
+            ur => ur.Id,
+            (uua, ur) => new { uua.Name, ur.CanUpdate })
+        .Where(u => u.CanUpdate)
+        .Select(u => u.Name));*/
+
+            /*TextBlock1.Text += String.Join("\n", _context
+                .Users
+                .Include(u => u.userAccesses)
+                .ThenInclude(ua => ua.UserRole)
+                .Where(u => u.userAccesses
+                .Any(ua => ua.UserRole.CanUpdate))
+                .Select(u => u.Name)
+                );*/
+
+            TextBlock1.Text += String.Join("\n", _context.UserRoles
+                .Where(ur => ur.CanUpdate)
+                .Include(ur => ur.UserAccesses)
+                .ThenInclude(ua => ua.User)
+                .Select(ur => String.Join("\n", ur.UserAccesses
+                    .Select(ua => ua.User.Name)))
+                );
+        }
     }
 }

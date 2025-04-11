@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,11 @@ namespace _01._04.Data.Entities
         public DateTime? BirthDate    { get; set; }
         public DateTime? RegisteredAt { get; set; }
         public DateTime? DeletedAt    { get; set; }
+
+        //інверсна навігаційна властивість - властивість у іншому Entity, що посилається на даний Entity
+
+        public List<UserAccess> userAccesses { get; set; } = new List<UserAccess>();
+
 
     }
 }

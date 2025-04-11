@@ -15,5 +15,6 @@ namespace _01._04.Data.Entities
         public string Salt { get; set; } = null!;
         public string Dk { get; set; } = null!; // Derived key by Rfc2898
         public User User { get; set; } = null!; // Навігаційна властивість - посилання на інший Entity
+        public UserRole UserRole { get; set; } = null!; // Навігаційна властивість - посилання на інший Entity
     }
 }

@@ -15,5 +15,6 @@ namespace _01._04.Data.Entities
         public bool CanRead { get; set; }
         public bool CanUpdate { get; set; }
         public bool CanDelete { get; set; }
+        public List<UserAccess> UserAccesses { get; set; } = [];
     }
 }

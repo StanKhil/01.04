@@ -38,9 +38,20 @@ namespace _01._04.Data
                 .IsUnique();
             modelBuilder.Entity<Entities.UserAccess>() //Налаштування зв'язків через навігаційні властивості
                 .HasOne(ua => ua.User)
-                .WithMany()
+                .WithMany(u => u.userAccesses)
                 .HasForeignKey(ua => ua.UserId) // ці інструкції не обов'язкові, якщо дотримуватися іменнування
                 .HasPrincipalKey(u => u.Id);
+
+            /*modelBuilder.Entity<Entities.User>() аналогічна інструкція, що починається з User
+                .HasMany(u => u.userAccesses)
+                .WithOne(ua => ua.User)
+                .HasForeignKey(ua => ua.UserId)
+                .HasPrincipalKey(u => u.Id);*/
+
+            modelBuilder.Entity<Entities.UserAccess>()
+                .HasOne(ua => ua.UserRole)
+                .WithMany(ur => ur.UserAccesses)
+                .HasForeignKey(ua => ua.RoleId);
 
             SeedData(modelBuilder);
         }
