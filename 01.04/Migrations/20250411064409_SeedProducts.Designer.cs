@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _01._04.Data;
 
@@ -11,9 +12,11 @@ using _01._04.Data;
 namespace _01._04.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250411064409_SeedProducts")]
+    partial class SeedProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,16 +193,6 @@ namespace _01._04.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c9418272-0f98-4915-a4b4-083676dd7e53"),
-                            Description = "Скляна ваза для квітів з прозорого скла",
-                            GroupId = new Guid("0dc4a692-2137-4694-bcb3-684ed826b520"),
-                            ImageUrl = "glass9.jpg",
-                            Name = "Ваза",
-                            Price = 150.0m,
-                            Stock = 10
-                        },
-                        new
-                        {
                             Id = new Guid("2c0ef23e-b65e-4353-b991-a52c7d3d029f"),
                             Description = "Настільна статуетка у формі вершника",
                             GroupId = new Guid("2444fc1e-5bc5-4a9a-8c69-fab1905a11a2"),
@@ -286,16 +279,6 @@ namespace _01._04.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e7d2d965-d653-4c62-9c6d-2f6a64771362"),
-                            Description = "Настільний глобус з підсвіткою",
-                            GroupId = new Guid("2444fc1e-5bc5-4a9a-8c69-fab1905a11a2"),
-                            ImageUrl = "office9.jpg",
-                            Name = "Глобус",
-                            Price = 800.0m,
-                            Stock = 10
-                        },
-                        new
-                        {
                             Id = new Guid("ed186a0a-7470-474e-85e7-efc6eeaf7705"),
                             Description = "Кам'яний малий глечик з кришкою",
                             GroupId = new Guid("3ec0edc9-b252-4470-bc1b-f66daea28bce"),
@@ -343,16 +326,6 @@ namespace _01._04.Migrations
                             GroupId = new Guid("3ec0edc9-b252-4470-bc1b-f66daea28bce"),
                             Name = "Слон",
                             Price = 350.0m,
-                            Stock = 10
-                        },
-                        new
-                        {
-                            Id = new Guid("8b597422-082c-4112-aeba-2dee8d4f4082"),
-                            Description = "Кам'яний кубок для напоїв",
-                            GroupId = new Guid("3ec0edc9-b252-4470-bc1b-f66daea28bce"),
-                            ImageUrl = "stone4.jpg",
-                            Name = "Кубок",
-                            Price = 500.0m,
                             Stock = 10
                         },
                         new
@@ -408,16 +381,6 @@ namespace _01._04.Migrations
                             Name = "Леви",
                             Price = 900.0m,
                             Slug = "wood-lions",
-                            Stock = 10
-                        },
-                        new
-                        {
-                            Id = new Guid("5f58f9f3-efd5-4010-bc72-c451eb45b8fe"),
-                            Description = "Дерев'яна настільна підставка для ручок з слоном",
-                            GroupId = new Guid("f3d4aee1-3ee1-4f2e-b244-026bd45207ec"),
-                            ImageUrl = "wood6.jpg",
-                            Name = "Слон",
-                            Price = 750.0m,
                             Stock = 10
                         });
                 });
