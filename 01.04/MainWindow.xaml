@@ -12,6 +12,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
         <StackPanel Orientation="Vertical">
             <Button x:Name="Button1" Click="Button1_Click">Oldiest</Button>
             <Button x:Name="Button2" Click="Button2_Click">3 last Reg</Button>
@@ -23,6 +28,49 @@
         <StackPanel Orientation="Vertical" Grid.Column="1">
             <TextBlock x:Name="TextBlock1"/>
         </StackPanel>
-        
+
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+            <StackPanel>
+                <TextBlock Text="Sign Up" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Name" Width="70"/>
+                    <TextBox Name="nameTextBox" Width="150"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Email" Width="70"/>
+                    <TextBox Name="emailTextBox" Width="110"/>
+                    <CheckBox Width="30" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Login" Width="70"/>
+                    <TextBox Name="loginTextBox" Width="150"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Password" Width="70"/>
+                    <PasswordBox Name="passTextBox" Width="110"/>
+                    <Button Width="100" Height="20" Content="Register" Click="SignUp"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Login" Width="70"/>
+                <TextBox Name="loginTextBoxSignIn" Width="150"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5">
+                <TextBlock Text="Password" Width="70"/>
+                <PasswordBox Name="passTextBoxSignIn" Width="110"/>
+                <Button Width="100" Height="20" Content="LogIn" Click="SignIn"/>
+            </StackPanel>
+
+            <TextBlock Text=""></TextBlock>
+        </StackPanel>
+
     </Grid>
 </Window>
