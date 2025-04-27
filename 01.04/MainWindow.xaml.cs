@@ -21,6 +21,7 @@ namespace _01._04
     public partial class MainWindow : Window
     {
         private DataContext _context;
+        private UserAccess authUser;
         public MainWindow()
         {
             _context = new DataContext();
@@ -111,22 +112,31 @@ namespace _01._04
         .Where(u => u.CanUpdate)
         .Select(u => u.Name));*/
 
-            /*TextBlock1.Text += String.Join("\n", _context
+            TextBlock1.Text += String.Join("\n", _context
                 .Users
+                .AsNoTracking()
                 .Include(u => u.userAccesses)
                 .ThenInclude(ua => ua.UserRole)
                 .Where(u => u.userAccesses
                 .Any(ua => ua.UserRole.CanUpdate))
                 .Select(u => u.Name)
-                );*/
+                ); //Якщо резальтат потрібен тільки для читання можна відключити трекінг
 
-            TextBlock1.Text += String.Join("\n", _context.UserRoles
+            /*TextBlock1.Text += String.Join("\n", _context.UserRoles
                 .Where(ur => ur.CanUpdate)
                 .Include(ur => ur.UserAccesses)
                 .ThenInclude(ua => ua.User)
                 .Select(ur => String.Join("\n", ur.UserAccesses
                     .Select(ua => ua.User.Name)))
-                );
+                );*/
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            if(authUser == null)
+                SignUp(sender, e);
+            else
+                Update(sender, e);
         }
 
         private void SignUp(object sender, RoutedEventArgs e)
@@ -135,6 +145,12 @@ namespace _01._04
             String email = emailTextBox.Text;
             String login = loginTextBox.Text;
             String pass = passTextBox.Password;
+
+            if (_context.UserAccesses.Any(ua => ua.Login == login && ua.User.DeletedAt == null))
+            {
+                MessageBox.Show("Login already exists");
+                return;
+            }
 
             Guid userId = Guid.NewGuid();
 
@@ -163,6 +179,11 @@ namespace _01._04
             _context.SaveChanges();
 
             MessageBox.Show("Registered");
+
+            nameTextBox.Text = "";
+            emailTextBox.Text = "";
+            loginTextBox.Text = "";
+            passTextBox.Password = "";
         }
 
         private void SignIn(object sender, RoutedEventArgs e)
@@ -171,7 +192,7 @@ namespace _01._04
             String pass = passTextBoxSignIn.Password;
             var userAccess = _context.UserAccesses
                 .Include(ua => ua.User)
-                .FirstOrDefault(ua => ua.Login == login);
+                .FirstOrDefault(ua => ua.Login == login && ua.User.DeletedAt == null);
             if (userAccess == null)
             {
                 MessageBox.Show("User not found");
@@ -184,6 +205,68 @@ namespace _01._04
                 return;
             }
             MessageBox.Show($"Welcome {userAccess.User.Name}");
+
+            authUser = userAccess;
+            nameTextBox.Text = authUser.User.Name;
+            emailTextBox.Text = authUser.User.Email;
+            loginTextBox.Text = userAccess.Login;
+
+            loginTextBoxSignIn.Text = "";
+            passTextBoxSignIn.Password = "";
+
+            Register.Content = "Update";
+        }
+
+        private void Update(object sender, RoutedEventArgs e)
+        {
+            String name = nameTextBox.Text;
+            String email = emailTextBox.Text;
+            String login = loginTextBox.Text;
+            String pass = passTextBox.Password;
+            if (!String.IsNullOrEmpty(login))
+            {
+                if (_context.UserAccesses.Any(ua => ua.Login == login && ua.User.DeletedAt == null))
+                {
+                    MessageBox.Show("Login already exists");
+                    return;
+                }
+                authUser.Login = login;
+            }
+            if (!String.IsNullOrEmpty(name))
+                authUser.User.Name = name;
+
+            if (!String.IsNullOrEmpty(email))
+                authUser.User.Email = email;
+            
+                
+            if (!String.IsNullOrEmpty(pass))
+                authUser.Dk = kdf(authUser.Salt, pass);
+
+            
+            _context.SaveChanges();
+            MessageBox.Show("Updated");
+        }
+
+        private void Delete(object sender, RoutedEventArgs e)
+        {
+            if (authUser == null)
+                return;
+            if(MessageBoxResult.Yes == MessageBox.Show("Deleted", "DB", MessageBoxButton.YesNo))
+            {
+                authUser.User.Name = "";
+                authUser.User.Email = "";
+                authUser.User.BirthDate = null;
+                authUser.User.DeletedAt = DateTime.Now;
+                _context.SaveChanges();
+
+                authUser = null;
+
+                Register.Content = "Register";
+                nameTextBox.Text = "";
+                emailTextBox.Text = "";
+                loginTextBox.Text = "";
+                passTextBox.Password = "";
+            }
         }
 
         String kdf(String password, String salt)
