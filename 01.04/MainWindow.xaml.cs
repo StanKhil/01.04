@@ -1,17 +1,11 @@
 ﻿using _01._04.Data;
 using _01._04.Data.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Dapper;
 
 namespace _01._04
 {
@@ -29,7 +23,7 @@ namespace _01._04
             
         }
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
+        /*private void Button1_Click(object sender, RoutedEventArgs e)
         {
             var oldiest = _context.Users.OrderBy(u => u.BirthDate).FirstOrDefault();
             TextBlock1.Text += $"{oldiest?.Name} {oldiest?.BirthDate}\n";
@@ -92,7 +86,7 @@ namespace _01._04
 
         private void Button5_Click(object sender, RoutedEventArgs e)
         {
-            /*TextBlock1.Text = String.Join("\n", _context
+            *//*TextBlock1.Text = String.Join("\n", _context
                 .Users
                 .FromSqlRaw(@"SELECT Users.* FROM Users
                 JOIN UserAccesses on Users.id = UserAccesses.UserId
@@ -110,7 +104,7 @@ namespace _01._04
             ur => ur.Id,
             (uua, ur) => new { uua.Name, ur.CanUpdate })
         .Where(u => u.CanUpdate)
-        .Select(u => u.Name));*/
+        .Select(u => u.Name));
 
             TextBlock1.Text += String.Join("\n", _context
                 .Users
@@ -122,14 +116,14 @@ namespace _01._04
                 .Select(u => u.Name)
                 ); //Якщо резальтат потрібен тільки для читання можна відключити трекінг
 
-            /*TextBlock1.Text += String.Join("\n", _context.UserRoles
+            TextBlock1.Text += String.Join("\n", _context.UserRoles
                 .Where(ur => ur.CanUpdate)
                 .Include(ur => ur.UserAccesses)
                 .ThenInclude(ua => ua.User)
                 .Select(ur => String.Join("\n", ur.UserAccesses
                     .Select(ua => ua.User.Name)))
-                );*/
-        }
+                );
+        }*/
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
@@ -284,6 +278,61 @@ namespace _01._04
         String hash(String input)
         {
             return Convert.ToHexString(System.Security.Cryptography.SHA1.HashData(Encoding.UTF8.GetBytes(input)));
+        }
+
+        private void Button1_Click(object sender, RoutedEventArgs e)
+        {
+            IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            // Зазначаємо рядок підключення та провайдер БД
+            SqlConnection sqlConnection = new SqlConnection(config.GetConnectionString("LocalDb"));
+            /*String cntSql = "SELECT COUNT(*) FROM ProductGroups";
+            int cnt = sqlConnection.ExecuteScalar<int>(cntSql);
+            TextBlock1.Text += $"Count: {cnt}";
+            String sqlTime = "SELECT CURRENT_TIMESTAMP";
+            TextBlock1.Text += $"DbTime {sqlConnection.ExecuteScalar<DateTime>(sqlTime)}";
+
+            String sqlId = "SELECT NEWID()";
+            TextBlock1.Text += $"\nNewId: {sqlConnection.ExecuteScalar<Guid>(sqlId)}";*/
+
+            /*String sql = "SELECT TOP 2 * FROM Products ORDER BY Price ASC";
+            Product product = sqlConnection.QueryFirst<Product>(sql);
+            TextBlock1.Text += $"Most expensive product: {product.Name} {product.Price}";*/
+
+            /*String sql = "SELECT TOP 2 * FROM Products WHERE Price<0";
+            var products = sqlConnection.QueryFirstOrDefault<Product>(sql);
+            TextBlock1.Text += $"Most expensive product: {products?.Name} {products?.Price}";*/
+
+            /*var products = sqlConnection.Query<Product>("Select * From Products");
+            foreach (var product in products)
+            {
+                TextBlock1.Text += $"{product.Name} {product.Price}\n";
+            }*/
+
+            /*String sql = "SELECT TOP 3 * FROM Products WHERE Price BETWEEN @minPrice and @maxPrice";
+
+            var products = sqlConnection.Query<Product>(sql, new { minPrice = 10, maxPrice = 100 });
+
+            foreach (var product in products)
+            {
+                TextBlock1.Text += $"{product.Name} {product.Price}\n";
+            }*/
+
+            /*String sql = "SELECT TOP 3 * FROM Products WHERE Name IN @names";
+            var products = sqlConnection.Query<Product>(sql, new { names = new[] { "Склянка", "Груша" } });
+
+            foreach (var product in products)
+            {
+                TextBlock1.Text += $"{product.Name} {product.Price}\n";
+            }*/
+
+            sqlConnection.Execute("UPDATE Products SET Price = 55 WHERE Name = @name", new { name = "Склянка" });
+
+            String sql = "SELECT TOP 3 * FROM Products Where Price = 55";
+            var products = sqlConnection.Query<Product>(sql);
+            foreach (var product in products)
+            {
+                TextBlock1.Text += $"{product.Name} {product.Price}\n";
+            }
         }
     }
 }

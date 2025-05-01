@@ -18,11 +18,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical">
-            <Button x:Name="Button1" Click="Button1_Click">Oldiest</Button>
-            <Button x:Name="Button2" Click="Button2_Click">3 last Reg</Button>
-            <Button x:Name="Button3" Click="Button3_Click">Role - count</Button>
-            <Button x:Name="Button4" Click="Button4_Click">user - access</Button>
-            <Button x:Name="Button5" Click="Button5_Click">Role can update</Button>
+            <Button x:Name="Button1" Content="Button1" Click="Button1_Click"/>
 
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Column="1">
